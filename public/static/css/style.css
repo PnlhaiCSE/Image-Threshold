@@ -8,6 +8,11 @@ body {
     min-height: calc(100vh - 56px);
 }
 
+.backhome {
+    color: white;
+    cursor: pointer;
+}
+
 
 .sidebar {
     width: 300px;
