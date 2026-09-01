@@ -2,7 +2,6 @@ body {
     background: #f5f6f8;
 }
 
-
 .app {
     display: flex;
     min-height: calc(100vh - 56px);
@@ -13,7 +12,6 @@ body {
     cursor: pointer;
 }
 
-
 .sidebar {
     width: 300px;
     background: white;
@@ -21,17 +19,14 @@ body {
     flex-shrink: 0;
 }
 
-
 .content {
     flex: 1;
     min-width: 0;
 }
 
-
 .image-card {
     height: 480px;
 }
-
 
 .image-box {
     display: flex;
@@ -41,18 +36,15 @@ body {
     overflow: hidden;
 }
 
-
 .preview-img {
     max-width: 100%;
-    max-height: 420px;
+    max-height: 100%;
     object-fit: contain;
 }
-
 
 .empty-text {
     color: #888;
 }
-
 
 .stat-card {
     background: white;
@@ -61,21 +53,17 @@ body {
     padding: 18px;
 }
 
-
 .stat-card small {
     color: #777;
 }
-
 
 .stat-card h4 {
     margin: 5px 0 0;
 }
 
-
 .param-panel {
     transition: 0.2s;
 }
-
 
 #histogram {
     width: 100%;

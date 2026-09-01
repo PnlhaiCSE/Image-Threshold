@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Thresholding</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</head>
+
+<body>
+    <nav class="navbar bg-secondary border-bottom navbar-expand-lg">
+        <div class="container">
+            <span class="navbar-brand fw-bold fs-3 ms-2">IMAGE THRESHOLDING</span>
+            <h3 class="text-secondary-emphasis"> Made by <b class="fst-italic">Nhóm 19</b> siu cấp vip pro </h3>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="row align-items-center home-content">
+            <!-- left -->
+            <div class="col-lg-6">
+                <h2 class="fst-italic fw-bold mb-2"> PnlhaiCSE </h2>
+
+                <h1 class="fw-bold display-5 mb-3">
+                    Xử lý ảnh ngưỡng hóa<br> trực quan và dễ dàng.
+                </h1>
+                <p class="text-secondary fs-5 mb-4">
+                    Khám phá và so sánh các phương pháp Global, Otsu và Adaptive Thresholding
+                    trên hình ảnh của bạn.
+                </p>
+                <a href="/threshold" class="btn btn-dark px-4 py-2"> Start Processing → </a>
+            </div>
+
+            <!-- right -->
+            <div class="col-lg-5 offset-lg-1 mt-4">
+                <div class="preview border border-dark p-3">
+                    <div class="small fw-bold mb-2"> PREVIEW </div>
+                    <div class="fake-image mb-3"> IMAGE </div>
+
+                    <div class="histogram-preview">
+                        <div style="height: 20%"></div>
+                        <div style="height: 35%"></div>
+                        <div style="height: 70%"></div>
+                        <div style="height: 90%"></div>
+                        <div style="height: 55%"></div>
+                        <div style="height: 35%"></div>
+                        <div style="height: 20%"></div>
+                        <div style="height: 15%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- footer -->
+        <div class="row border-top py-3 mt-1">
+            <h5 class="d-flex justify-content-center align-items-center">
+                &copy; 2026 PnlhaiCSE. All rights reserved.
+            </h5>
+        </div>
+    </main>
+</body>
+
+</html>

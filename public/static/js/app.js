@@ -70,15 +70,9 @@ const uploadImage = async () => {
     }
 
     const formData = new FormData();
-    formData.append(
-        "avatar",
-        file
-    );
+    formData.append("avatar", file);
 
-    showMessage(
-        "Đang upload ảnh...",
-        "info"
-    );
+    showMessage("Đang upload ảnh...", "info");
 
     try {
         const response = await fetch(
@@ -91,14 +85,11 @@ const uploadImage = async () => {
 
         const data = await response.json();
         if (!data.success) {
-            showMessage(
-                data.message,
-                "danger"
-            );
+            showMessage(data.message, "danger");
             return;
         }
         currentFile = data.file;
-        originalImage.src = `public/image/${data.file}`;
+        originalImage.src = `/image/${data.file}`;
         originalImage.classList.remove("d-none");
         originalEmpty.classList.add("d-none");
         processBtn.disabled = false;
@@ -109,14 +100,11 @@ const uploadImage = async () => {
         drawHistogram(data.histogram);
 
         showMessage(
-            `Upload thành công: ${data.width} × ${data.height}`,
+            `Upload ảnh thành công:<br/>Kích thước: ${data.width}px × ${data.height}px`,
             "success"
         );
     } catch (error) {
-        showMessage(
-            `Có lỗi khi upload ảnh: ${error}`,
-            "danger"
-        );
+        showMessage(`Có lỗi khi upload ảnh: ${error}`, "danger");
     }
 }
 
@@ -126,10 +114,7 @@ const processImage = async () => {
     }
 
     processBtn.disabled = true;
-    showMessage(
-        "Đang xử lý...",
-        "info"
-    );
+    showMessage("Đang xử lý...", "info");
 
     const data = {
         file: currentFile,
@@ -155,10 +140,7 @@ const processImage = async () => {
 
         const result = await response.json();
         if (!result.success) {
-            showMessage(
-                result.message,
-                "danger"
-            );
+            showMessage(result.message, "danger");
             return;
         }
 
@@ -174,15 +156,9 @@ const processImage = async () => {
         processTime.textContent = result.time + " ms";
         downloadBtn.disabled = false;
 
-        showMessage(
-            "Xử lý thành công.",
-            "success"
-        );
+        showMessage("Xử lý thành công.", "success");
     } catch (error) {
-        showMessage(
-            "Có lỗi khi xử lý ảnh.",
-            "danger"
-        );
+        showMessage("Có lỗi khi xử lý ảnh.", "danger");
     } finally {
         processBtn.disabled = false;
     }
@@ -199,30 +175,84 @@ downloadBtn.addEventListener("click", () => {
     link.href = `/outputs/${outputFile}`;
     link.download = "threshold_result.png";
     link.click();
-}
-);
+});
 
 const drawHistogram = (hist) => {
     const canvas = document.getElementById("histogram");
     const ctx = canvas.getContext("2d");
 
-    const width = canvas.width = canvas.clientWidth * devicePixelRatio;
-    const height = canvas.height = 150 * devicePixelRatio;
-
+    const dpr = window.devicePixelRatio || 1;
+    const width = canvas.clientWidth;
+    const height = 250;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, width, height);
-    const max = Math.max(...hist);
-    const barWidth = width / 256;
 
+    const paddingLeft = 55;
+    const paddingRight = 20;
+    const paddingTop = 20;
+    const paddingBottom = 40;
+
+    const graphWidth = width - paddingLeft - paddingRight;
+    const graphHeight = height - paddingTop - paddingBottom;
+    const max = Math.max(...hist);
+    const barWidth = graphWidth / 256;
+
+    ctx.fillStyle = "blue";
     for (let i = 0; i < 256; i++) {
-        const h = (hist[i] / max) * height;
+        const barHeight = (hist[i] / max) * graphHeight;
 
         ctx.fillRect(
-            i * barWidth,
-            height - h,
+            paddingLeft + i * barWidth,
+            paddingTop + graphHeight - barHeight,
             barWidth,
-            h
+            barHeight
         );
     }
-}
+
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    // trục Y
+    ctx.moveTo(paddingLeft, paddingTop);
+    ctx.lineTo(paddingLeft, paddingTop + graphHeight);
+    // trục X
+    ctx.moveTo(paddingLeft, paddingTop + graphHeight);
+    ctx.lineTo(paddingLeft + graphWidth, paddingTop + graphHeight);
+
+    ctx.stroke();
+    const xTicks = [0, 42, 85, 128, 170, 213, 255];
+
+    ctx.fillStyle = "black";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+
+    xTicks.forEach(value => {
+        const x = paddingLeft + (value / 255) * graphWidth;
+        ctx.beginPath();
+        ctx.moveTo(x, paddingTop + graphHeight);
+        ctx.lineTo(x, paddingTop + graphHeight + 5);
+
+        ctx.stroke();
+        ctx.fillText(value, x, paddingTop + graphHeight + 10);
+    });
+
+    const yTickCount = 5;
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+
+    for (let i = 0; i < yTickCount; i++) {
+        const value = (max / (yTickCount - 1)) * i;
+        const y = paddingTop + graphHeight - (value / max) * graphHeight;
+
+        ctx.beginPath();
+        ctx.moveTo(paddingLeft - 5, y);
+        ctx.lineTo(paddingLeft, y);
+
+        ctx.stroke();
+        ctx.fillText(Math.round(value), paddingLeft - 8, y);
+    }
+};
 
 updatePanels();

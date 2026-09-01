@@ -1,10 +1,13 @@
 import os
+import cv2
+import io
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, jsonify, send_from_directory
-from werkzeug.utils import secure_filename
+from flask import Flask, render_template, request, jsonify, send_file
+from utils import allowed_file, save_file, cvtGray, histogram
 
 UPLOAD_FOLDER = './public/image/'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+HOST = os.getenv("HOST")
+PORT = os.getenv('PORT')
 
 load_dotenv()
 app = Flask(
@@ -15,10 +18,11 @@ app = Flask(
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = os.getenv("SECRET_KEY")
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 @app.route("/")
+def home():
+    return render_template('home.jinja')
+
+@app.route("/threshold")
 def hello_world():
     # return "<h1>Hello, World!</h1>"
     return render_template('index.html')
@@ -26,6 +30,7 @@ def hello_world():
 @app.route('/upload', methods=['POST'])
 def upload_file():
     file = request.files.get('avatar')
+
     # If the user does not select a file, the browser submits an
     # empty file without a filename.
     if file is None:
@@ -45,22 +50,33 @@ def upload_file():
             "success": False,
             "message": "Định dạng file không được hỗ trợ"
         }), 400
-
-    filename = secure_filename(file.filename)
-    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    
+    if file:
+        filename = save_file(file, UPLOAD_FOLDER)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        gray = cvtGray(filepath)
+        height, width = gray.shape
+        hist = histogram(gray)
 
     return jsonify({
         "success": True,
-        "file": filename
+        "file": filename,
+        "histogram": hist,
+        "width": width,
+        "height": height
     }), 200
 
-@app.route('/public/image/<filename>')
+@app.route('/image/<filename>')
 def uploaded_image(filename):
-    return send_from_directory('public/image',filename)
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+    gray = cvtGray(filepath)
+    _, buffer = cv2.imencode('.jpg', gray)
+    
+    return send_file(
+        io.BytesIO(buffer),
+        mimetype="image/jpeg"
+    )
 
 if __name__ == "__main__":
-    app.run(
-        host=os.getenv("HOST"),
-        port=os.getenv('PORT'),
-        debug=True
-    )
+    app.run(host=HOST, port=PORT, debug=True)
