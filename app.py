@@ -52,7 +52,7 @@ def home():
 @app.route("/threshold")
 def thresPage():
     # return "<h1>Hello, World!</h1>"
-    return render_template('index.html')
+    return render_template('index.jinja')
 
 @app.route('/upload', methods=['POST'])
 @limiter.limit("10 per minute")
