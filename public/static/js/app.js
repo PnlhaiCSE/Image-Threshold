@@ -1,5 +1,6 @@
 let currentFile = null;
 let outputFile = null;
+let currentOtsuThreshold = null;
 
 const imageInput = document.getElementById("imageInput");
 const method = document.getElementById("method");
@@ -44,6 +45,7 @@ const updatePanels = () => {
     }
     if (method.value === "otsu") {
         otsuPanel.classList.remove("d-none");
+        otsuValue.textContent = currentOtsuThreshold ?? "--";
     }
     if (method.value === "adaptive") {
         adaptivePanel.classList.remove("d-none");
@@ -89,6 +91,7 @@ const uploadImage = async () => {
             return;
         }
         currentFile = data.file;
+        currentOtsuThreshold = data.otsu_threshold;
         originalImage.src = `/image/${data.file}`;
         originalImage.classList.remove("d-none");
         originalEmpty.classList.add("d-none");
@@ -97,6 +100,7 @@ const uploadImage = async () => {
         resultImage.classList.add("d-none");
         resultEmpty.classList.remove("d-none");
 
+        otsuValue.textContent = data.otsu_threshold ?? "Không tính được threshold";
         drawHistogram(data.histogram);
 
         showMessage(
@@ -150,9 +154,8 @@ const processImage = async () => {
         resultEmpty.classList.add("d-none");
 
         resultThreshold.textContent = result.threshold === null ? "Local" : result.threshold;
-        otsuValue.textContent = result.threshold ?? "--";
-        blackPct.textContent = result.stats.black_pct + "%";
-        whitePct.textContent = result.stats.white_pct + "%";
+        blackPct.textContent = `${result.stats.black} ~ ${result.stats.black_pct}%`;
+        whitePct.textContent = `${result.stats.white} ~ ${result.stats.white_pct}%`;
         processTime.textContent = result.time + " ms";
         downloadBtn.disabled = false;
 
@@ -173,7 +176,7 @@ downloadBtn.addEventListener("click", () => {
     }
     const link = document.createElement("a");
     link.href = `/outputs/${outputFile}`;
-    link.download = "threshold_result.png";
+    link.download = outputFile;
     link.click();
 });
 
