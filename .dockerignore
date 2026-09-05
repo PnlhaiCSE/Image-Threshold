@@ -1,0 +1,9 @@
+image/
+outputs/
+.env.example
+.git
+.gitignore
+*.md
+.github/
+vscode/
+__pycache__/

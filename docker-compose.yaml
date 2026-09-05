@@ -1,0 +1,18 @@
+services:
+  web-image:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ip1:latest
+    container_name: haidepzaivcl
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - app_net
+
+networks:
+  app_net:
+    driver: bridge
