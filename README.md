@@ -6,7 +6,7 @@
 > **Major:** Computer Science<br/>
 > **Course:** Xử lý ảnh (Image Processing) 
 
-## Feature
+## ✨Feature
 
 - Tải ảnh lên với các định dạng `PNG`, `JPG`, `JPEG`, `BMP` và `WEBP`.
 - Tự động chuyển ảnh màu sang ảnh xám trước khi xử lý.
@@ -16,7 +16,7 @@
 - Tải ảnh kết quả về máy.
 - Giao diện trực quan, responsive trên mọi thiết bị.
 
-## Project Structure
+## 📁Project Structure
 
 ```text
 Project-Threshold/
@@ -36,7 +36,7 @@ Project-Threshold/
 	└── static/               # Static files
 ```
 
-## Algorithms
+## 🧮Algorithms
 
 ### _1. Global Threshold_
 Dùng một ngưỡng `T` cho toàn bộ ảnh. Người dùng chọn `T` từ `0–255`. Đơn giản, nhanh, phù hợp ảnh có ánh sáng đồng đều.
@@ -49,7 +49,7 @@ Tính ngưỡng riêng cho từng vùng ảnh dựa trên vùng lân cận `bloc
 
 Phù hợp ảnh có ánh sáng không đồng đều.
 
-## How It Works
+## ⚙️How It Works
 
 1. Người dùng chọn ảnh từ giao diện.
 2. Flask kiểm tra phần mở rộng, lưu ảnh và chuyển ảnh sang grayscale.
@@ -58,16 +58,16 @@ Phù hợp ảnh có ánh sáng không đồng đều.
 5. OpenCV tạo ảnh output, tính thống kê và đo Processing Time.
 6. Kết quả được lưu và có thể xem/tải xuống.
 
-## Performance and Security
+## 🚀Performance and Security
 
 - Gunicorn chạy 4 workers, 2 threads/worker, timeout 60s. Thời gian xử lý phụ thuộc vào kích thước ảnh, phần cứng và tải hệ thống.
 - Upload tối đa 10 MB và áp dụng rate limit cho các API.
 - Kiểm tra file, tham số xử lý và sự tồn tại của file trước khi thực hiện.
 
-## License
+## 📜License
 
 This repository is developed and maintained by PnlhaiCSE. The source code, interface, configuration, and accompanying resources are the property of the author.<br/>
 This project is released under the All Rights Reserved license and is not covered by any Open Source license. The use, copying, distribution, or modification of the source code is subject to the terms of this license.
 
-## Author
+## 👨‍💻Author
 Made with ❤️ by PnlhaiCSE
