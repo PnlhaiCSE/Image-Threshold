@@ -1,5 +1,5 @@
-image/
-outputs/
+public/image/
+public/outputs/
 .env.example
 .git
 .gitignore
